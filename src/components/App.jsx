@@ -13,7 +13,7 @@ export class App extends Component {
     images: [],
     error: null,
     loading: false,
-    totalPages: 0,
+    totalImages: 0,
   };
 
   componentDidUpdate(_, prevState) {
@@ -37,8 +37,8 @@ export class App extends Component {
       const data = await getImages(this.state.searchQuery, this.state.page);
       this.setState(prevState => {
         return {
-          images: [...prevState.images, ...data],
-          totalPages: data.totalHits,
+          images: [...prevState.images, ...data.hits],
+          totalImages: data.totalHits,
           error: '',
         };
       });
@@ -62,23 +62,23 @@ export class App extends Component {
   };
 
   render() {
-    const { loading, totalPages, images, error } = this.state;
-    const isLastResults = images.length === totalPages;
+    const { loading, totalImages, images, error } = this.state;
+    const isLastResults = images.length === totalImages;
+    console.log(images.length);
+    console.log(totalImages);
+    console.log(isLastResults);
     const showLoadMore = !isLastResults && !loading;
     return (
       <div className="App">
         <Searchbar onSubmit={this.onImageSearch} />
-        {loading ? (
-          <RingLoader color="#36d7b7" size={200} />
-        ) : (
-          <ImageGallery data={this.state.images} />
-        )}
+        {images.length > 0 && <ImageGallery data={this.state.images} />}
         {showLoadMore && (
           <Button type="button" onClick={this.onIncrementPage}>
             {loading ? <Loader /> : 'Load more'}
           </Button>
         )}
         {error && <p>{error}</p>}
+        {/* <RingLoader color="#36d7b7" size={200} /> */}
       </div>
     );
   }
