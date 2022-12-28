@@ -13,6 +13,7 @@ export class App extends Component {
     images: [],
     error: null,
     loading: false,
+    totalPages: 0,
   };
 
   componentDidUpdate(_, prevState) {
@@ -34,9 +35,12 @@ export class App extends Component {
     this.setState({ loading: true });
     try {
       const data = await getImages(this.state.searchQuery, this.state.page);
-      console.log(data);
       this.setState(prevState => {
-        return { images: [...prevState.images, ...data] };
+        return {
+          images: [...prevState.images, ...data],
+          totalPages: data.totalHits,
+          error: '',
+        };
       });
     } catch (error) {
       this.setState({ error: `Something went wrong... ${error.message}` });
@@ -46,6 +50,10 @@ export class App extends Component {
   };
 
   onImageSearch = newQuery => {
+    if (newQuery === this.state.searchQuery) {
+      alert('same query! Try to change your request');
+      return;
+    }
     this.setState({
       searchQuery: newQuery,
       images: [],
@@ -54,20 +62,24 @@ export class App extends Component {
   };
 
   render() {
-    const { loading } = this.state;
-
+    const { loading, totalPages, images, error } = this.state;
+    const isLastResults = images.length === totalPages;
+    const showLoadMore = !isLastResults && !loading;
     return (
-      <>
+      <div className="App">
         <Searchbar onSubmit={this.onImageSearch} />
         {loading ? (
           <RingLoader color="#36d7b7" size={200} />
         ) : (
           <ImageGallery data={this.state.images} />
         )}
-        <Button type="button" onClick={this.onIncrementPage}>
-          {loading ? <Loader /> : 'Load more'}
-        </Button>
-      </>
+        {showLoadMore && (
+          <Button type="button" onClick={this.onIncrementPage}>
+            {loading ? <Loader /> : 'Load more'}
+          </Button>
+        )}
+        {error && <p>{error}</p>}
+      </div>
     );
   }
 }
