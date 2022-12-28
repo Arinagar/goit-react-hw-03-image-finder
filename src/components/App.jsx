@@ -3,7 +3,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { getImages } from 'service/api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button.styled';
-import { RingLoader } from 'react-spinners';
+// import { RingLoader } from 'react-spinners';
 import { Loader } from './Loader/Loader';
 
 export class App extends Component {
