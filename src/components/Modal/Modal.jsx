@@ -1,5 +1,9 @@
 import { Component } from 'react';
+import { createPortal } from 'react-dom';
+
 import css from './Modal.module.css';
+
+const modalRootRef = document.getElementById('modal-root');
 
 export class Modal extends Component {
   componentDidMount = () => {
@@ -23,12 +27,13 @@ export class Modal extends Component {
 
   render() {
     const { alt, url } = this.props;
-    return (
+    return createPortal(
       <div className={css.overlay} onClick={this.handleClick}>
         <div className={css.modal}>
           <img src={url} alt={alt} />
         </div>
-      </div>
+      </div>,
+      modalRootRef
     );
   }
 }
