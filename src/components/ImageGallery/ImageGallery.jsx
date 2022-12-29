@@ -1,26 +1,11 @@
-import { Modal } from 'components/Modal/Modal';
+import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import css from './ImageGallery.module.css';
-
-// state = { showModal: false };
-
-// toggleModal = () => {
-//   this.setState(prev => ({ showModal: !prev.showModal }));
-// };
 
 export const ImageGallery = ({ data }) => {
   return (
     <ul className={css.imageGallery}>
-      {data.map(({ id, webformatURL, largeImageURL, tags }) => {
-        return (
-          <li className={css.imageGalleryItem} key={id}>
-            <img
-              src={webformatURL}
-              alt={tags}
-              className={css.ImageGalleryItem_image}
-            />
-            <Modal />
-          </li>
-        );
+      {data.map(image => {
+        return <ImageGalleryItem key={image.id} image={image} />;
       })}
     </ul>
   );

@@ -35,6 +35,7 @@ export class App extends Component {
     try {
       const data = await getImages(this.state.searchQuery, this.state.page);
       const normalizedImages = normalizeImages(data.hits);
+
       this.setState(prevState => {
         return {
           images: [...prevState.images, ...normalizedImages],
@@ -43,6 +44,10 @@ export class App extends Component {
         };
       });
     } catch (error) {
+      // if (this.state.images.length === 0) {
+      //   alert('Sorry, nothing found');
+      //   return;
+      // }
       this.setState({ error: `Something went wrong... ${error.message}` });
     } finally {
       this.setState({ loading: false });
@@ -54,6 +59,7 @@ export class App extends Component {
       alert('same query! Try to change your request');
       return;
     }
+
     this.setState({
       searchQuery: newQuery,
       images: [],
@@ -70,7 +76,7 @@ export class App extends Component {
         <Searchbar onSubmit={this.onImageSearch} />
         {images.length > 0 && <ImageGallery data={this.state.images} />}
         <div className="loader">
-          {loading && <RingLoader color="#36d7b7" size={200} />}
+          {loading && <RingLoader color="#36d7b7" size={100} />}
         </div>
         {showLoadMore && (
           <Button type="button" onClick={this.onIncrementPage}>

@@ -1,5 +1,5 @@
 import { React, Component } from 'react';
-import { BiSearchAlt2 } from 'react-icons/bi';
+import { ImSearch } from 'react-icons/im';
 import css from './Searchbar.module.css';
 
 export class Searchbar extends Component {
@@ -29,7 +29,7 @@ export class Searchbar extends Component {
       <header className={css.searchbar}>
         <form className={css.searchForm} onSubmit={this.onSearchSubmit}>
           <button type="submit" className={css.searchForm_button}>
-            <BiSearchAlt2 />
+            <ImSearch />
           </button>
 
           <input
