@@ -7,7 +7,7 @@ export const getImages = async (query, page) => {
       q: query,
       page: page,
       orientation: 'horizontal',
-      per_page: 21,
+      per_page: 12,
     },
   });
   return data;
