@@ -34,6 +34,10 @@ export class App extends Component {
     this.setState({ loading: true });
     try {
       const data = await getImages(this.state.searchQuery, this.state.page);
+      if (data.hits.length === 0) {
+        alert('Sorry, nothing found');
+        return;
+      }
       const normalizedImages = normalizeImages(data.hits);
 
       this.setState(prevState => {
@@ -44,10 +48,6 @@ export class App extends Component {
         };
       });
     } catch (error) {
-      // if (this.state.images.length === 0) {
-      //   alert('Sorry, nothing found');
-      //   return;
-      // }
       this.setState({ error: `Something went wrong... ${error.message}` });
     } finally {
       this.setState({ loading: false });
@@ -64,6 +64,7 @@ export class App extends Component {
       searchQuery: newQuery,
       images: [],
       page: 1,
+      totalImages: 0,
     });
   };
 
