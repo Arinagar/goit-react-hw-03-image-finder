@@ -12,3 +12,11 @@ export const getImages = async (query, page) => {
   });
   return data;
 };
+
+export const normalizeImages = images =>
+  images.map(({ id, tags, largeImageURL, webformatURL }) => ({
+    id,
+    tags,
+    largeImageURL,
+    webformatURL,
+  }));

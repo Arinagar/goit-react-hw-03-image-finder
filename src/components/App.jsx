@@ -1,10 +1,9 @@
 import { React, Component } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
-import { getImages } from 'service/api';
+import { getImages, normalizeImages } from 'service/api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button.styled';
-// import { RingLoader } from 'react-spinners';
-import { Loader } from './Loader/Loader';
+import { RingLoader } from 'react-spinners';
 
 export class App extends Component {
   state = {
@@ -35,9 +34,10 @@ export class App extends Component {
     this.setState({ loading: true });
     try {
       const data = await getImages(this.state.searchQuery, this.state.page);
+      const normalizedImages = normalizeImages(data.hits);
       this.setState(prevState => {
         return {
-          images: [...prevState.images, ...data.hits],
+          images: [...prevState.images, ...normalizedImages],
           totalImages: data.totalHits,
           error: '',
         };
@@ -64,21 +64,20 @@ export class App extends Component {
   render() {
     const { loading, totalImages, images, error } = this.state;
     const isLastResults = images.length === totalImages;
-    console.log(images.length);
-    console.log(totalImages);
-    console.log(isLastResults);
     const showLoadMore = !isLastResults && !loading;
     return (
       <div className="App">
         <Searchbar onSubmit={this.onImageSearch} />
         {images.length > 0 && <ImageGallery data={this.state.images} />}
+        <div className="loader">
+          {loading && <RingLoader color="#36d7b7" size={200} />}
+        </div>
         {showLoadMore && (
           <Button type="button" onClick={this.onIncrementPage}>
-            {loading ? <Loader /> : 'Load more'}
+            Load more
           </Button>
         )}
         {error && <p>{error}</p>}
-        {/* <RingLoader color="#36d7b7" size={200} /> */}
       </div>
     );
   }
